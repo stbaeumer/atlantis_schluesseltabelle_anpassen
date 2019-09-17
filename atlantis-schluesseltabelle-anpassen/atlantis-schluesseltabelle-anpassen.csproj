@@ -47,6 +47,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schluessel.cs" />
     <Compile Include="Schluesseltabelle.cs" />
+    <Compile Include="Schulfomrmen.cs" />
+    <Compile Include="Schulform.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
