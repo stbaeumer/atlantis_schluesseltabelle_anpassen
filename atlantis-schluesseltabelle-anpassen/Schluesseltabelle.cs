@@ -234,14 +234,14 @@ FROM DBA.schluessel", connection);
                 {
                     Console.WriteLine(ex.ToString());
                 }                
-            }
+            }   
         }
 
         internal void PrepareDELETE(Schluesseltabelle schulformenSoll, string pfad, string kennzeichen)
         {
             using (StreamWriter outputFile = new StreamWriter(pfad, true, System.Text.Encoding.Default))
             {
-                Console.Write((kennzeichen + " bereit zum Löschen ").PadRight(75, '.'));
+                Console.Write((kennzeichen + " bei der die Priorität auf 0 gesetzt wird ").PadRight(75, '.'));
 
                 int i = 0;
 
