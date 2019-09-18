@@ -10,64 +10,34 @@ namespace atlantis_schluesseltabelle_anpassen
     class Program
     {
         public const string ConnectionStringAtlantis = @"Dsn=Atlantis9;uid=DBA";
-        public static string schluesseltabellePfad = "Schluesseltabelle_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
-        public static string insertPfad = "INSERT_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".sql";
+        public static string SchluesseltabellePfad = "Schluesseltabelle_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
+        public static string Pfad = DateTime.Now.ToString("yyyyMMddHHmmss") + ".sql";
+        public static string AktSjAtlantis = (DateTime.Now.Month >= 8 ? DateTime.Now.Year : DateTime.Now.Year - 1).ToString() + "/" + ((DateTime.Now.Month >= 8 ? DateTime.Now.Year : DateTime.Now.Year - 1) + 1 - 2000);
 
         static void Main(string[] args)
         {
             Console.WriteLine("Atlantis2Webuntis (Version 20190914)");
             Console.WriteLine("====================================");
             Console.WriteLine("");
-
-            int sj = (DateTime.Now.Month >= 8 ? DateTime.Now.Year : DateTime.Now.Year - 1);            
-            string aktSjAtlantis = sj.ToString() + "/" + (sj + 1 - 2000);
-           
-            Schluesseltabelle istSchluesseltabelle = new Schluesseltabelle(ConnectionStringAtlantis, aktSjAtlantis);
-            DataSet dataSetAsdtabs = AccessDbLoader.LoadFromFile(@"C:\ASDPC32\Hilfstabellen\" + "ASDTABS.MDB");
-            DataSet dataSetSchulver = AccessDbLoader.LoadFromFile(@"C:\ASDPC32\Hilfstabellen\" + "schulver.MDB");
-
-            Schulformen schulformen = new Schulformen(dataSetSchulver);
-                    
-            Schluesseltabelle sollSchulSchluesseltabelle = new Schluesseltabelle(dataSetSchulver, schulformen);
-
-            // Schulen, die in Atlantis fehlen
-
-            Schluesseltabelle neueSchulschluesseltabelle = new Schluesseltabelle();
-
-            sollSchulSchluesseltabelle.FehlendeEinträgeErgänzen(istSchluesseltabelle, insertPfad);
             
-            Schluesseltabelle updateSchulschluesseltabelle = new Schluesseltabelle();
+            Schluesseltabelle istSchluesseltabelle = new Schluesseltabelle(ConnectionStringAtlantis, AktSjAtlantis);
+            DataSet dataSetAsdtabs = AccessDbLoader.LoadFromFile(@"ASDTABS.MDB");
+            DataSet dataSetSchulver = AccessDbLoader.LoadFromFile(@"schulver.MDB");
+            
+            // Schulformen
 
-            // Für alle Schulen, ...
+            Schluesseltabelle SchulformenSoll = new Schluesseltabelle(dataSetSchulver, dataSetAsdtabs, "PS-SCHULART");
+            SchulformenSoll.PrepareINSERT(istSchluesseltabelle, "INSERT_Schulform_" + Pfad, "PS-SCHULART");
+            SchulformenSoll.PrepareUPDATE(istSchluesseltabelle, "UPDATE_Schulform_" + Pfad, "PS-SCHULART");
+            istSchluesseltabelle.PrepareDELETE(SchulformenSoll, "DELETE_Schulform_" + Pfad, "PS-SCHULART");
 
-            foreach (var st in (from s in sollSchulSchluesseltabelle where s.Kennzeichen == "PS-SCHULE" select s).ToList())
-            {
-                // ... für die eine ID bereits existert, ...
+            // Schulen
 
-                if ((from u in istSchluesseltabelle where u.Kennzeichen == "PS-SCHULE" where u.Wert == st.Wert select u).Any())
-                {
-                    // ... wird geprüft, ob ein Update stattfinden muss.    
-
-                    if (!(from x in istSchluesseltabelle
-                         where x.Kennzeichen == "PS-SCHULE"
-                         where x.Wert == st.Wert
-                         where x.Steuerung == (st.Steuerung == "SK"? "SE":st.Steuerung) // Schulform
-                          select x
-                         ).Any())
-                    {
-                        // Falls die Schulform abweicht, muss ein Update stattfinden.
-
-                        Console.WriteLine(st.Wert + " Neue Schulform: " + st.Steuerung);
-
-                    }
-
-                    neueSchulschluesseltabelle.Add(st);
-                }
-            }
-
-
-
-            istSchluesseltabelle.ausgeben(schluesseltabellePfad);
+            Schluesseltabelle SchulenSoll = new Schluesseltabelle(dataSetSchulver, dataSetSchulver, "PS-SCHULE");
+            SchulenSoll.PrepareINSERT(istSchluesseltabelle, "INSERT_Schule_" + Pfad, "PS-SCHULE");
+            SchulenSoll.PrepareUPDATE(istSchluesseltabelle, "UPDATE_Schule_" + Pfad, "PS-SCHULE");
+                        
+            istSchluesseltabelle.ausgeben(SchluesseltabellePfad);
             Console.ReadKey();
         }
     }

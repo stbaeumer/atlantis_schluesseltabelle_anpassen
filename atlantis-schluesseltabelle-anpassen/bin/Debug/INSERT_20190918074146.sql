@@ -1,0 +1,1 @@
+INSERT INTO schluessel(kennzeichen, wert, aufloesung, aufloesung_2, steuerung) VALUES('PS-SCHULE', '198468', 'Priv. Sekundarschule Schloss Varenholz, -Sek.I- Staatl.gen.Ersatzsch.d.Tr. OWL', 'Schloﬂ Varenholz -, 32689, Kalletal, 05755 9620','SK');
