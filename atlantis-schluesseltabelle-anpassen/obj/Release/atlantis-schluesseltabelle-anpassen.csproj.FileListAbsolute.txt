@@ -1,0 +1,5 @@
+\\fs01\Schulverwaltung\atlantis-schluesseltabelle-anpassen\atlantis-schluesseltabelle-anpassen.exe.config
+\\fs01\Schulverwaltung\atlantis-schluesseltabelle-anpassen\atlantis-schluesseltabelle-anpassen.exe
+\\fs01\Schulverwaltung\atlantis-schluesseltabelle-anpassen\atlantis-schluesseltabelle-anpassen.pdb
+U:\Source\Repos\atlantis_schluesseltabelle_anpassen\atlantis-schluesseltabelle-anpassen\obj\Release\atlantis-schluesseltabelle-anpassen.exe
+U:\Source\Repos\atlantis_schluesseltabelle_anpassen\atlantis-schluesseltabelle-anpassen\obj\Release\atlantis-schluesseltabelle-anpassen.pdb

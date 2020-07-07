@@ -89,7 +89,7 @@ namespace atlantis_schluesseltabelle_anpassen
 
         public Schluesseltabelle(string connectionStringAtlantis, string aktSjAtlantis)
         {
-            Console.Write("Schluesseltabelleneinträge in Atlantis ".PadRight(75, '.'));
+            Console.Write("Schluesseltabelleneinträge aus Atlantis einlesen ".PadRight(75, '.'));
 
             using (OdbcConnection connection = new OdbcConnection(connectionStringAtlantis))
             {
